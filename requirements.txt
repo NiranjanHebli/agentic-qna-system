@@ -1,0 +1,11 @@
+langchain
+langchain-core
+langchain-community
+langgraph
+langchain-groq
+langchain-huggingface
+faiss-cpu
+duckduckgo-search
+pydantic
+ddgs
+python-dotenv

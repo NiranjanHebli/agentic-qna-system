@@ -1,0 +1,14 @@
+{
+    "week-1":"SWOT, vibing coding, prompt engineering fundamentals, python fundamentals ",
+    "week-2": "python data structures, numpy, pandas, matplotlib, seaborn",
+    "week-3": "Descriptive Stats, Probability Theory, Hypothesis testing, Python for stats, Pandas, SQL, Coding",
+    "week-4": "Types of Machine learning, Machine learning basics, Bias - Variance trade off",
+    "week-5": "EDA, Data Preprocessing, Linear Regression, Logistic Regression",
+    "week-6":"Logistic Regression, KNN, SVM, PCA, DBSCAN, Decision Trees, Fraud Detection",
+    "week-7": "TF-IDF, Text Classification, Evaluation Metrics (Precision, Recall, F1-Score), Document Similarity (Cosine Similarity), Custom Business Metrics, Natural Language Processing (NLP)",
+    "week-8": "Time Series Analysis, Neural Networks, Convolutional Neural Networks (CNNs), Recurrent Neural Networks (RNNs), Transfer Learning, Data Cleaning & Missing Data Handling, Deep Learning System Design",
+    "week-9": "Encoder-Decoder, Attention, Self-Attention, Transformer, Multi-Head Attention, BERT vs GPT, GANS, Foundation Models, LLM Design, VIT vs CNN, Domain-Specific Transformers, Open vs Closed Source LLMs, Transformer Architecture Evolution, BERT vs GPT for Enterprise, Self-attention from scratch.",
+    "week-10": "LLM APIs, Prompt Engineering, Retrieval-Augmented Generation (RAG), Transformer Architecture, Generative Adversarial Networks (GANS), Foundation Models, BERT",
+    "week-11": "Agentic AI, AI Agents, Agentic Architecture, Multi-Agent Systems, LLMOps",
+    "week-12": "MLOps, Model Deployment, Model Monitoring, Model Versioning, Model Governance, Model Security, Model Reliability, MLOps Tools & Platforms, End-to-End MLOps Pipeline, Real-world MLOps Challenges & Best Practices"
+}
