@@ -1,8 +1,12 @@
 # Agentic Syllabus Assistant
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![LangChain](https://img.shields.io/badge/🦜🔗_LangChain-latest-orange.svg)](https://python.langchain.com/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-Agentic-blueviolet.svg)](https://python.langchain.com/docs/langgraph)
+[![LangChain](https://img.shields.io/badge/🦜🔗_LangChain-1.2.13-orange.svg)](https://python.langchain.com/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-1.1.3-blueviolet.svg)](https://python.langchain.com/docs/langgraph)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-0.5.23-green.svg)](https://www.trychroma.com/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-2.13.3-red.svg)](https://docs.pydantic.dev/)
+[![FAISS](https://img.shields.io/badge/FAISS-1.13.2-blue.svg)](https://github.com/facebookresearch/faiss)
+[![DuckDuckGo](https://img.shields.io/badge/DuckDuckGo_Search-8.1.1-lightgrey.svg)](https://github.com/deedy5/duckduckgo_search)
 [![Groq](https://img.shields.io/badge/Powered_by-Groq-orange.svg)](https://groq.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
@@ -25,9 +29,17 @@ Instead of a standard flat prompt, this project utilizes an **Agentic Workflow**
 *   **Dual-Graph Strategy**: Supports both a production graph (for `app.py`) and an evaluation graph (for `test.py`) which includes the quality evaluator node.
 *   **Integrated Performance Monitoring**: Custom callback handlers track token usage and latency in real-time.
 
+## Realistic Use Cases
+
+1. **Persistent Tutoring Across Sessions (Long-Term Memory):** 
+   A student asks complex questions about Artificial Neural Networks and ends their session. A few days later, they return using the same `thread_id` and ask, "Can you explain the math behind the backpropagation for those networks we discussed?" The system leverages **ChromaDB** to recall the previous session's context and provides a seamless, context-aware answer without requiring the student to repeat themselves.
+
+2. **Automated Study Notes Generation:**
+   During intensive exam preparation, a student engages in a multi-turn deep dive on a specific week's topics. The system tracks the conversation utilizing its short-term **InMemorySaver** checkpointing. Once the conversation reaches 4 turns, the assistant automatically exports a beautifully formatted Markdown transcript to the `data/transcript` folder. The student can then use this `.md` file as a pre-made, highly accurate study guide.
+
 ## Visual Walkthrough
 
-[![HLD](https://mermaid.ink/img/pako:eNp1UGFvmzAU_CvWkzoRjUZgoMk8aVI2smpTl0oln1pPkwUOoIIdGbOui_LfZ8DQMm1IFva9u3vv3QlSmXEgcKjkU1owpdE-pgKZ7-ICxfxQCo52htIMYLLf3O0dJ9GGuVgM2J1sNVcnCh0P-cQClArn5uYbynhaGj06Ml0sKJytiGtV8p_8wcowmSD0BiWcqbToHD5vviQJeoviNn3szrU0Ht8Hj7hUPNWjQ0AsgDaieRr6f3w-sqZBanBm1Yv2mguumJ76h2SC0G2rj63uu0tVM41MCqxCX5Pb3YvBdhc7zlZkXQp_B7bN8llg6PLyw5jKq8gMjCj0d4JS2aqG_1C8MiNkFAaNjeS_qryfubL0Yf-BPI-5L48Lvk7vH4V5QD3BLDtumVZdonYU1f_ezyq2o2v9WapLKWaUyTq3F1MFF3JVZkC0arkLNTfBd084dUoKuuA1p0DMNWPqkQIVZ6M5MnEvZT3KzDx5AeTAqsa82mNmzOOS5YrVE6q4yLj6JFuhgay83gPICX4BwVG0DNfvVhHGYbQO_DBy4RmIH-Bl5OEwCHCAff8Kn1343Xf1llcRDn0v8lbYw364Ds9_AMtYCVg?type=png)](https://mermaid.live/edit#pako:eNp1UGFvmzAU_CvWkzoRjUZgoMk8aVI2smpTl0oln1pPkwUOoIIdGbOui_LfZ8DQMm1IFva9u3vv3QlSmXEgcKjkU1owpdE-pgKZ7-ICxfxQCo52htIMYLLf3O0dJ9GGuVgM2J1sNVcnCh0P-cQClArn5uYbynhaGj06Ml0sKJytiGtV8p_8wcowmSD0BiWcqbToHD5vviQJeoviNn3szrU0Ht8Hj7hUPNWjQ0AsgDaieRr6f3w-sqZBanBm1Yv2mguumJ76h2SC0G2rj63uu0tVM41MCqxCX5Pb3YvBdhc7zlZkXQp_B7bN8llg6PLyw5jKq8gMjCj0d4JS2aqG_1C8MiNkFAaNjeS_qryfubL0Yf-BPI-5L48Lvk7vH4V5QD3BLDtumVZdonYU1f_ezyq2o2v9WapLKWaUyTq3F1MFF3JVZkC0arkLNTfBd084dUoKuuA1p0DMNWPqkQIVZ6M5MnEvZT3KzDx5AeTAqsa82mNmzOOS5YrVE6q4yLj6JFuhgay83gPICX4BwVG0DNfvVhHGYbQO_DBy4RmIH-Bl5OEwCHCAff8Kn1343Xf1llcRDn0v8lbYw364Ds9_AMtYCVg)
+[![Agentic Syllabus Assistant](https://mermaid.ink/img/pako:eNplkt9umzAUxl_F8sXUSiELIQl_pG7qylZFajqpsIsN0GSF04AWbHQwbbIoL7EX2JvsmfYIM8bJ6MaF7WN9v8_HnznQtciBBnSDrC5IHKacqO9TA3iRdCNZ8rqV2SWxrDfkRvDHcpPEBQLLyTIkr81W1mN9oaV38errLcjkpkBRsfBdQB5AYglPQO4E31gxYNXpJeykoQ2i8cjgK6gE7iP2BBgoUJ0aFQJlj0eSSTBwP0YDiwfRSsBDP5F7dc3jUGr2LUt10WIDqr-tsst71vSanJt-RSJguC60UfavxS1wQLbVbFgirGXST-SaN8_m-Bedno07pMclJKcF-dhKFfsQM35D-dDvTOr0VF4qzaSbSdwiJ1KQ00sYP6Mx79ryList1QW5uiKzty8CM6Luup-h0dz7Xa0eI_n988cvsyarkMTIeLPGspbZf-S9MPnW2_1F8qHkKrTrpaqbWvAGssueMGZnacrpSP2iZU4DiS2MaKXen3UlPXRESmUBFaQ0UMuc4beUpvyomJrxL0JUJwxFuylo8Mi2jaraOleJhSVTP_9fCfAcULdMA8edaw8aHOiOBra_GM-ntu8tZp7r-a4zonsaWLY3GS_cqbewPXsy96a2cxzR7_rYydj3FxPXd6Zzz3Pmzsw__gEv5xbO?type=png)](https://mermaid.live/edit#pako:eNplkt9umzAUxl_F8sXUSiELIQl_pG7qylZFajqpsIsN0GSF04AWbHQwbbIoL7EX2JvsmfYIM8bJ6MaF7WN9v8_HnznQtciBBnSDrC5IHKacqO9TA3iRdCNZ8rqV2SWxrDfkRvDHcpPEBQLLyTIkr81W1mN9oaV38errLcjkpkBRsfBdQB5AYglPQO4E31gxYNXpJeykoQ2i8cjgK6gE7iP2BBgoUJ0aFQJlj0eSSTBwP0YDiwfRSsBDP5F7dc3jUGr2LUt10WIDqr-tsst71vSanJt-RSJguC60UfavxS1wQLbVbFgirGXST-SaN8_m-Bedno07pMclJKcF-dhKFfsQM35D-dDvTOr0VF4qzaSbSdwiJ1KQ00sYP6Mx79ryList1QW5uiKzty8CM6Luup-h0dz7Xa0eI_n988cvsyarkMTIeLPGspbZf-S9MPnW2_1F8qHkKrTrpaqbWvAGssueMGZnacrpSP2iZU4DiS2MaKXen3UlPXRESmUBFaQ0UMuc4beUpvyomJrxL0JUJwxFuylo8Mi2jaraOleJhSVTP_9fCfAcULdMA8edaw8aHOiOBra_GM-ntu8tZp7r-a4zonsaWLY3GS_cqbewPXsy96a2cxzR7_rYydj3FxPXd6Zzz3Pmzsw__gEv5xbO)
 
 ## Project Structure 
 

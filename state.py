@@ -1,7 +1,19 @@
-from typing import TypedDict
+from typing import TypedDict, Annotated
+import operator
 from pydantic import BaseModel, Field
 
 class GraphState(TypedDict):
+    question: str
+    long_term_memory: str
+    chat_history: list
+    route: str
+    week_number: str
+    topic: str
+    search_results: str
+    final_output: dict
+    evaluation: dict
+
+class LegacyState(TypedDict):
     question: str
     route: str
     week_number: str

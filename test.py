@@ -1,6 +1,6 @@
 import time
 import json
-from graph import build_test_graph
+from graph import build_legacy_test_graph
 from langchain_core.callbacks import BaseCallbackHandler
 
 class GroqTokenTracker(BaseCallbackHandler):
@@ -33,7 +33,7 @@ class GroqTokenTracker(BaseCallbackHandler):
 if __name__ == "__main__":
     print(" RUNNING MODULAR EVALUATION BATCH TEST ")
 
-    app = build_test_graph()
+    app = build_legacy_test_graph()
     token_tracker = GroqTokenTracker()
 
     math_questions = [
@@ -63,7 +63,8 @@ if __name__ == "__main__":
         q_start_time = time.time()
 
         result = app.invoke(
-            {"question": question}, config={"callbacks": [token_tracker]}
+            {"question": question}, 
+            config={"callbacks": [token_tracker]}
         )
 
         q_latency = time.time() - q_start_time
