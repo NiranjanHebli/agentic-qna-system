@@ -1,8 +1,12 @@
 from langchain_core.prompts import ChatPromptTemplate
 import json
+from pydantic import BaseModel, Field
 from state import GraphState, RouteDecision, FinalGeneration, EvaluationResult
 from config import llm, ddg_search
 from vector_store import retriever
+
+class GradeDocuments(BaseModel):
+    binary_score: str = Field(description="Documents are relevant to the question, 'yes' or 'no'")
 
 def route_question(state: GraphState):
     print("NODE 1: ROUTING QUESTION")
@@ -21,10 +25,25 @@ def retrieve_and_search(state: GraphState):
     
     retrieved_docs = retriever.invoke(question)
     best_match = retrieved_docs[0]
-    week_num = best_match.metadata["week"]
-    topics = best_match.page_content
     
-    search_query = f"{topics} context: {question}"
+    grader_llm = llm.with_structured_output(GradeDocuments)
+    grade_prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are a grader assessing relevance of a retrieved syllabus topic to a user question.\nIf the topic contains keyword(s) or semantic meaning related to the user question, grade it as 'yes'.\nOtherwise, grade it as 'no'."),
+        ("human", "Retrieved topic: \n\n {topic} \n\n User question: {question}")
+    ])
+    
+    grader_chain = grade_prompt | grader_llm
+    relevance = grader_chain.invoke({"topic": best_match.page_content, "question": question})
+    
+    if relevance.binary_score.lower() == "yes":
+        week_num = best_match.metadata["week"]
+        topics = best_match.page_content
+        search_query = f"{topics} context: {question}"
+    else:
+        week_num = "Out of Syllabus"
+        topics = "N/A"
+        search_query = question
+        
     print(f"Executing web search for: {search_query}")
     try:
         search_results = ddg_search.invoke(search_query)
@@ -50,16 +69,8 @@ def generate_output(state: GraphState):
     generator_llm = llm.with_structured_output(FinalGeneration)
     
     prompt = ChatPromptTemplate.from_messages([
-        ("system", """You are a helpful teaching assistant. Answer the user's question based on the provided context.
-        If the question is course-related, incorporate the week number and topics provided.
-        Format your response exactly according to the required schema."""),
-        ("human", """Question: {question}
-        
-        Retrieved Syllabus Week: {week}
-        Syllabus Topics: {topic}
-        Web Search Context: {search}
-        
-        Generate the final answer.""")
+        ("system", "You are a helpful teaching assistant. Answer the user's question based on the provided context.\nIf the question is course-related, incorporate the week number and topics provided.\nFormat your response exactly according to the required schema."),
+        ("human", "Question: {question}\n\nRetrieved Syllabus Week: {week}\nSyllabus Topics: {topic}\nWeb Search Context: {search}\n\nGenerate the final answer.")
     ])
     
     chain = prompt | generator_llm
@@ -76,19 +87,11 @@ def evaluate_output(state: GraphState):
     print("NODE 5: EVALUATING GENERATED OUTPUT")
     evaluator_llm = llm.with_structured_output(EvaluationResult)
     
-    system = """You are a quality evaluated Evaluate the results against the original goal using this rubric:
-    - Completeness: Does it fully address the goal? (0-0.4)
-    - Accuracy: Is the information correct and specific? (0-0.3)
-    - Clarity: Is it well-structured and clear? (0-0.3)
-    Sum the scores for a total between 0.0 and 1.0
-    """
+    system = "You are a quality evaluated Evaluate the results against the original goal using this rubric:\n- Completeness: Does it fully address the goal? (0-0.4)\n- Accuracy: Is the information correct and specific? (0-0.3)\n- Clarity: Is it well-structured and clear? (0-0.3)\nSum the scores for a total between 0.0 and 1.0"
     
     prompt = ChatPromptTemplate.from_messages([
         ("system", system),
-        ("human", """Original Goal/Question: {question}
-        Generated Output: {output}
-        
-        Evaluate the output and provide the scores and brief feedback.""")
+        ("human", "Original Goal/Question: {question}\nGenerated Output: {output}\n\nEvaluate the output and provide the scores and brief feedback.")
     ])
     
     chain = prompt | evaluator_llm

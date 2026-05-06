@@ -1,5 +1,5 @@
 import json
-from graph import build_graph 
+from graph import build_graph
 
 if __name__ == "__main__":
     app = build_graph()
@@ -15,3 +15,9 @@ if __name__ == "__main__":
     result_2 = app.invoke(example_2_inputs)
     print("\nFINAL JSON OUTPUT:")
     print(json.dumps(result_2["final_output"], indent=2))
+
+    print("\n\n=== EXAMPLE 3: Course Related Question But Not in JSON ===")
+example_3_inputs = {"question": "What is Artificial Neural Network?"}
+result_3 = app.invoke(example_3_inputs)
+print("\nFINAL JSON OUTPUT:")
+print(json.dumps(result_3["final_output"], indent=2))
